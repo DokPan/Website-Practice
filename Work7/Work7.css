@@ -1,0 +1,13 @@
+table{
+	border-collapse: collapse;
+	border: 3px solid grey;
+	margin: auto;
+	width: 80%; 
+	height: 80%;
+}
+th,td{
+	border: 3px solid grey;
+}
+th:first-child{
+	height: 30px;
+}
