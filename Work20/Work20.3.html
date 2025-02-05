@@ -1,0 +1,47 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Движение шара</title>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400" style="border:1px solid black;"></canvas>
+
+    <script>
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+
+        let ball = { 
+            x: 200, 
+            y: 200, 
+            radius: 20, 
+            dx: Math.random() * 4 + 2, 
+            dy: Math.random() * 4 + 2 
+        };
+
+        function drawBall() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function moveBall() {
+            if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                ball.dx *= -1;
+            }
+            if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+                ball.dy *= -1;
+            }
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+            drawBall();
+        }
+
+        setInterval(moveBall, 20);
+        drawBall();
+    </script>
+</body>
+</html>
