@@ -1,0 +1,61 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Движение шаров</title>
+</head>
+<body>
+    <input type="number" id="numBalls" placeholder="Количество шаров">
+    <button onclick="startBalls()">Запустить</button>
+    <canvas id="canvas" width="500" height="400" style="border:1px solid black;"></canvas>
+
+    <script>
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let balls = [];
+
+        function createBalls(num) {
+            balls = [];
+            for (let i = 0; i < num; i++) {
+                let radius = 10 + Math.random() * 15;
+                let x = radius + Math.random() * (canvas.width - 2 * radius);
+                let y = radius + Math.random() * (canvas.height - 2 * radius);
+                let dx = (Math.random() - 0.5) * 6;
+                let dy = (Math.random() - 0.5) * 6;
+                balls.push({ x, y, radius, dx, dy });
+            }
+        }
+
+        function drawBalls() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let ball of balls) {
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "rgb(" + Math.random() * 255 + "," + Math.random() * 255 + "," + Math.random() * 255 + ")";
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        function moveBalls() {
+            for (let ball of balls) {
+                if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                    ball.dx *= -1;
+                }
+                if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+                    ball.dy *= -1;
+                }
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+            }
+            drawBalls();
+        }
+
+        function startBalls() {
+            let num = document.getElementById("numBalls").value;
+            createBalls(num);
+            setInterval(moveBalls, 20);
+        }
+    </script>
+</body>
+</html>
