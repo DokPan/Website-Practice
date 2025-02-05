@@ -1,0 +1,33 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Движение квадрата</title>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400" style="border:1px solid black;"></canvas>
+
+    <script>
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+
+        let square = { x: 150, y: 0, size: 50, speed: 2 };
+
+        function drawSquare() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "red";
+            ctx.fillRect(square.x, square.y, square.size, square.size);
+        }
+
+        function moveSquare() {
+            if (square.y + square.size < canvas.height) {
+                square.y += square.speed;
+            }
+            drawSquare();
+        }
+
+        setInterval(moveSquare, 20);
+        drawSquare();
+    </script>
+</body>
+</html>
