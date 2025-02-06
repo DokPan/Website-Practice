@@ -1,0 +1,27 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Кликер - Приветствие</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать в игру "Кликер"!</h1>
+        <p>Правила: Кликайте по кругу, чтобы заработать очки. У вас 30 секунд!</p>
+        <input type="text" id="playerName" placeholder="Введите имя">
+        <button onclick="startGame()">Играть</button>
+    </div>
+    
+    <script>
+        function startGame() {
+            let name = document.getElementById("playerName").value.trim();
+            if (name) {
+                localStorage.setItem("playerName", name);
+                window.location.href = "Work23.2.html";
+            } else {
+                alert("Введите имя!");
+            }
+        }
+    </script>
+</body>
+</html>
