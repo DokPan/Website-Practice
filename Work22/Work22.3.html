@@ -1,0 +1,55 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Перемещение объекта</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        #movable {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="movable"></div>
+
+    <script>
+        let object = document.getElementById("movable");
+        let step = 10;
+
+        document.addEventListener("keydown", function(event) {
+            let rect = object.getBoundingClientRect(); 
+            
+            switch (event.key) {
+                case "ArrowUp":
+                    object.style.top = rect.top - step + "px";
+                    break;
+                case "ArrowDown":
+                    object.style.top = rect.top + step*9 + "px";
+                    break;
+                case "ArrowLeft":
+                    object.style.left = rect.left - step + "px";
+                    break;
+                case "ArrowRight":
+                    object.style.left = rect.left + step*5 + "px";
+                    break;
+            }
+        });
+    </script>
+
+</body>
+</html>
