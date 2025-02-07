@@ -1,80 +1,108 @@
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Пинг-понг</title>
-    <style>
-        #gameArea {
-            width: 600px;
-            height: 400px;
-            border: 2px solid black;
-            position: relative;
-            overflow: hidden;
-            background-color: #f0f0f0;
-        }
-        #ball {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: red;
-            position: absolute;
-            left: 300px;
-            top: 200px;
-        }
-        #paddle {
-            width: 10px;
-            height: 80px;
-            background-color: blue;
-            position: absolute;
-            right: 10px;
-            top: 160px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Пинг-понг</title>
+  <style>
+    #gameCanvas {
+      background-color: #eee;
+      border: 2px solid #333;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
 </head>
 <body>
-    <h2>Пинг-понг: двигайте ракетку стрелками ↑ и ↓</h2>
-    <div id="gameArea">
-        <div id="ball"></div>
-        <div id="paddle"></div>
-    </div>
+  <canvas id="gameCanvas" width="600" height="400"></canvas>
+  
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+	
+    let ball = {
+      x: 100,
+      y:  200,
+      radius: 10,
+      dx: 4,
+      dy: 3
+    };
 
-    <script>
-        let ball = document.getElementById("ball");
-        let paddle = document.getElementById("paddle");
-        let ballSpeedX = 4, ballSpeedY = 3;
-        let paddleSpeed = 20;
+    let paddle = {
+      width: 10,
+      height: 80,
+      x: canvas.width - 10,
+      y: canvas.height / 2 - 40,
+      speed: 20
+    };
 
-        function moveBall() {
-            let ballRect = ball.getBoundingClientRect();
-            let paddleRect = paddle.getBoundingClientRect();
-            let gameRect = document.getElementById("gameArea").getBoundingClientRect();
+    let gameInterval;
 
-            ball.style.left = (ball.offsetLeft + ballSpeedX) + "px";
-            ball.style.top = (ball.offsetTop + ballSpeedY) + "px";
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+      ctx.closePath();
+    }
 
-            if (ball.offsetTop <= 0 || ball.offsetTop >= gameRect.height - 20) ballSpeedY *= -1;
-            if (ball.offsetLeft <= 0) ballSpeedX *= -1;
+    function drawPaddle() {
+      ctx.beginPath();
+      ctx.rect(paddle.x, paddle.y, paddle.width, paddle.height);
+      ctx.fillStyle = 'blue';
+      ctx.fill();
+      ctx.closePath();
+    }
 
-            if (ballRect.right >= paddleRect.left && 
-                ballRect.bottom >= paddleRect.top &&
-                ballRect.top <= paddleRect.bottom) {
-                ballSpeedX *= -1;
-            }
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBall();
+      drawPaddle();
+    }
 
-            if (ball.offsetLeft > gameRect.width) {
-                alert("Вы проиграли!");
-                ball.style.left = "300px";
-                ball.style.top = "200px";
-                ballSpeedX = -4;
-            }
+    function update() {
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+
+      if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+        ball.dy = -ball.dy;
+      }
+
+      if (ball.x - ball.radius < 0) {
+        ball.dx = -ball.dx;
+      }
+
+      if (ball.x + ball.radius >= canvas.width) {
+        if (ball.y >= paddle.y && ball.y <= paddle.y + paddle.height) {
+          ball.dx = -ball.dx;
+        } else {
+          clearInterval(gameInterval);
+          alert("Вы проиграли!");
+		  restartGame();
+          return;
         }
+      }
 
-        document.addEventListener("keydown", (event) => {
-            let top = paddle.offsetTop;
-            if (event.key === "ArrowUp" && top > 0) paddle.style.top = (top - paddleSpeed) + "px";
-            if (event.key === "ArrowDown" && top < 320) paddle.style.top = (top + paddleSpeed) + "px";
-        });
+      draw();
+    }
 
-        setInterval(moveBall, 30);
-    </script>
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "ArrowUp") {
+        paddle.y = Math.max(paddle.y - paddle.speed, 0);
+      } else if (event.key === "ArrowDown") {
+        paddle.y = Math.min(paddle.y + paddle.speed, canvas.height - paddle.height);
+      }
+    });
+
+	function restartGame() {
+      ball.x = canvas.width / 2;
+      ball.y = canvas.height / 2;
+      ball.dx = 4;
+      ball.dy = 3;
+
+      paddle.y = canvas.height / 2 - paddle.height / 2;
+
+      gameInterval = setInterval(update, 20);
+    }
+	 gameInterval = setInterval(update, 20);
+  </script>
 </body>
 </html>
