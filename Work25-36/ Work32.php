@@ -8,7 +8,7 @@ $array1 = array(
 );
 foreach ($array1 as $index => $value) {
     echo "[$index] => $value<br>";
-	
+
 $array2 = array(
     "Element A",
     "Element B",
